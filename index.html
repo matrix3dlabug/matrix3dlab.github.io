@@ -201,9 +201,28 @@
   <a href="mailto:matrixdlabs@gmail.com">matrixdlabs@gmail.com</a>
 </footer>
 
-<script src="config.js"></script>
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+<!-- Served from this site (no outside CDN, so content blockers can't stop
+     it). Version numbers make browsers fetch fresh copies after updates. -->
+<script src="supabase.js?v=2.119.0"></script>
+<script src="config.js?v=4"></script>
+<script>
+// Safety net: if the page can't start (old browser, blocked script), say so
+// instead of showing a blank or half-loaded page.
+setTimeout(function () {
+  var form = document.getElementById('form');
+  var setup = document.getElementById('setup');
+  if (form.classList.contains('hidden') && setup.classList.contains('hidden')) {
+    setup.classList.remove('hidden');
+    document.getElementById('setupWhy').textContent =
+      'This browser could not load the quote form. Try refreshing, or open the page in Chrome.';
+  }
+}, 6000);
+</script>
+<script>
+(function () {
+'use strict';
+if (!window.supabase || !window.supabase.createClient) return; // safety net above explains
+const { createClient } = window.supabase;
 
 const SHOP_WHATSAPP = '256792308649';
 
@@ -499,6 +518,7 @@ $('again').addEventListener('click', e => {
 });
 
 loadPrices();
+})();
 </script>
 </body>
 </html>
