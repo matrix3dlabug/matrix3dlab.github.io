@@ -1,4 +1,8 @@
-// Optional. The page normally gets its connection from the link the
-// Matrix One app gives you (?c=M1:...). To use a plain link instead, fill in
-// your Supabase project URL and anon/publishable key:
-// window.MATRIX_ONE = { url: 'https://xxxx.supabase.co', key: 'your-anon-key' };
+// Connection for the Matrix 3D Lab quote page.
+// This is the Supabase project address and its PUBLISHABLE key, which is
+// meant to be public: the database only lets visitors send quote requests,
+// upload model files and read the price list. Never put a secret key here.
+window.MATRIX_ONE = {
+  url: 'https://vvpprhkekjigfhgpppqf.supabase.co',
+  key: 'sb_publishable_7NbMcJ3aFkE6KU9uIsTURw_9SJ0RZwe',
+};
