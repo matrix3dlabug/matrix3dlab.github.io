@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get a 3D printing quote | Matrix 3D Lab UG</title>
+<meta name="description" content="Upload your 3D model and get an instant price estimate from Matrix 3D Lab UG, Kampala.">
+<meta name="theme-color" content="#0F766E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230F766E'/%3E%3Cpath d='M20 80V20h15l15 24 15-24h15v60H66V43L54 62h-8L34 43v37z' fill='white'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --teal: #0F766E; --teal-dark: #134E4A; --teal-soft: #E6F4F1; --mint: #5EEAD4;
+    --ink: #0F1A1A; --muted: #5B6B6B; --line: #DDE6E5; --bg: #F4F7F7; --card: #fff;
+    --red: #DC2626; --amber: #B45309; --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: var(--bg); color: var(--ink); line-height: 1.45; }
+  header { background: linear-gradient(135deg, #14B8A6, var(--teal) 55%, var(--teal-dark));
+           color: #fff; padding: 28px 20px 64px; }
+  header .wrap { max-width: 760px; margin: 0 auto; }
+  .brand { font-weight: 700; letter-spacing: .12em; font-size: 13px; opacity: .85; }
+  h1 { margin: 6px 0 4px; font-size: clamp(26px, 6vw, 36px); line-height: 1.15; }
+  header p { margin: 0; opacity: .9; }
+  main { max-width: 760px; margin: -44px auto 40px; padding: 0 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+          padding: 20px; margin-bottom: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.03); }
+  .card h2 { margin: 0 0 4px; font-size: 18px; }
+  .card .sub { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+  .step { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+          background: var(--teal); color: #fff; font-size: 13px; font-weight: 700; margin-right: 8px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; color: #2B3A3A; }
+  input[type=text], input[type=tel], input[type=email], input[type=number], input[type=date], select, textarea {
+    width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: #F8FBFB; font: inherit; color: inherit; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--teal); border-color: transparent; background: #fff; }
+  textarea { min-height: 84px; resize: vertical; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+  .drop { border: 2px dashed #9CC9C2; border-radius: var(--radius); padding: 26px 16px; text-align: center;
+          background: var(--teal-soft); cursor: pointer; transition: background .15s, border-color .15s; }
+  .drop:hover, .drop.over { background: #D5EEE9; border-color: var(--teal); }
+  .drop strong { color: var(--teal); }
+  .drop small { display: block; color: var(--muted); margin-top: 4px; }
+  .model { display: none; margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: #F8FBFB;
+           border: 1px solid var(--line); font-size: 14px; }
+  .model b { word-break: break-all; }
+  .facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .pill { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; }
+  .warn { color: var(--amber); font-size: 13px; margin-top: 8px; }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
+  @media (max-width: 520px) { .checks { grid-template-columns: 1fr; } }
+  .check { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1px solid var(--line);
+           border-radius: 12px; background: #F8FBFB; cursor: pointer; font-size: 14px; }
+  .check input { margin-top: 3px; accent-color: var(--teal); width: 18px; height: 18px; }
+  .check span small { display: block; color: var(--muted); font-size: 12px; }
+  .price { background: var(--teal-dark); color: #fff; }
+  .price .sub { color: #CFE9E4; }
+  .lines { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .lines td { padding: 5px 0; }
+  .lines td:last-child { text-align: right; white-space: nowrap; }
+  .total { font-size: 28px; font-weight: 800; margin-top: 8px; }
+  .note { font-size: 12.5px; color: #CFE9E4; margin-top: 8px; }
+  button.primary { width: 100%; padding: 15px; border: 0; border-radius: 14px; background: var(--teal);
+                   color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; }
+  button.primary:disabled { opacity: .55; cursor: default; }
+  .error { color: var(--red); font-size: 14px; margin-top: 10px; display: none; }
+  .done { display: none; text-align: center; }
+  .done .ref { font-size: 30px; font-weight: 800; color: var(--teal); letter-spacing: .04em; margin: 6px 0; }
+  .wa { display: inline-flex; gap: 8px; align-items: center; margin-top: 14px; padding: 13px 20px; border-radius: 14px;
+        background: #25D366; color: #fff; font-weight: 700; text-decoration: none; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 10px 20px 40px; }
+  footer a { color: var(--teal); }
+  .hidden { display: none !important; }
+  .progress { height: 6px; border-radius: 6px; background: var(--line); overflow: hidden; margin-top: 10px; display: none; }
+  .progress div { height: 100%; width: 0; background: var(--teal); transition: width .2s; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">MATRIX 3D LAB UG &middot; KAMPALA</div>
+    <h1>Get a 3D printing quote</h1>
+    <p>Upload your model, choose the material and see an estimated price straight away.</p>
+  </div>
+</header>
+
+<main>
+  <form id="form" novalidate>
+    <!-- 1. Model -->
+    <section class="card">
+      <h2><span class="step">1</span>Your model</h2>
+      <p class="sub">STL file, up to 50 MB. No file yet? Tick "I need it designed" below.</p>
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose an STL file">
+        <strong>Tap to choose a file</strong> or drop it here
+        <small>.stl (3MF / OBJ / STEP also accepted; priced after we check them)</small>
+      </div>
+      <input type="file" id="file" accept=".stl,.3mf,.obj,.step,.stp,model/stl,application/sla" hidden>
+      <div class="model" id="model"></div>
+      <label class="check" style="margin-top:12px">
+        <input type="checkbox" id="needsDesign">
+        <span>I need it designed<small>Describe it in the notes, or send sketches/photos on WhatsApp. Design is quoted separately.</small></span>
+      </label>
+    </section>
+
+    <!-- 2. Options -->
+    <section class="card">
+      <h2><span class="step">2</span>Material and options</h2>
+      <p class="sub">Not sure? Leave PLA: it suits most models.</p>
+      <div class="row">
+        <div>
+          <label for="material">Material</label>
+          <select id="material"></select>
+        </div>
+        <div>
+          <label for="quantity">How many</label>
+          <input type="number" id="quantity" min="1" max="1000" value="1" inputmode="numeric">
+        </div>
+      </div>
+      <label for="color">Colour you'd like</label>
+      <input type="text" id="color" maxlength="60" placeholder="e.g. Black, White, Galaxy Black, any">
+      <div class="checks">
+        <label class="check"><input type="checkbox" id="sanding"><span>Sanding / priming<small>Smoother finish</small></span></label>
+        <label class="check"><input type="checkbox" id="painting"><span>Painting<small>Painted by hand</small></span></label>
+        <label class="check"><input type="checkbox" id="multiColour"><span>Multi-colour<small>Several filament colours</small></span></label>
+        <label class="check"><input type="checkbox" id="rush"><span>Rush job<small>Printed first</small></span></label>
+        <label class="check"><input type="checkbox" id="delivery"><span>Delivery in Kampala<small>Or pick up at the shop</small></span></label>
+      </div>
+    </section>
+
+    <!-- 3. Estimate -->
+    <section class="card price" id="priceCard">
+      <h2>Estimated price</h2>
+      <p class="sub" id="priceSub">Choose a model file to see the estimate.</p>
+      <table class="lines" id="lines"></table>
+      <div class="total" id="total">&ndash;</div>
+      <div class="note">This is an estimate from your file's size. We confirm the final price on WhatsApp before printing.</div>
+    </section>
+
+    <!-- 4. Contact -->
+    <section class="card">
+      <h2><span class="step">3</span>Your details</h2>
+      <p class="sub">We reply on WhatsApp, Mon&ndash;Sat 9am&ndash;5pm.</p>
+      <div class="row">
+        <div>
+          <label for="name">Name</label>
+          <input type="text" id="name" maxlength="100" autocomplete="name" required>
+        </div>
+        <div>
+          <label for="phone">WhatsApp number</label>
+          <input type="tel" id="phone" maxlength="30" autocomplete="tel" placeholder="07XX XXX XXX" required>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label for="ctype">I am</label>
+          <select id="ctype">
+            <option value="individual">An individual</option>
+            <option value="student">A student</option>
+            <option value="architect">An architect</option>
+            <option value="signMaker">A sign maker</option>
+            <option value="manufacturer">A manufacturer</option>
+            <option value="healthcare">In healthcare</option>
+            <option value="business">A business</option>
+          </select>
+        </div>
+        <div>
+          <label for="neededBy">Needed by (optional)</label>
+          <input type="date" id="neededBy">
+        </div>
+      </div>
+      <label for="email">Email (optional)</label>
+      <input type="email" id="email" maxlength="120" autocomplete="email">
+      <label for="notes">Notes</label>
+      <textarea id="notes" maxlength="2000" placeholder="Size, strength, what it's for, anything we should know"></textarea>
+      <div class="progress" id="progress"><div></div></div>
+      <div class="error" id="error"></div>
+      <div style="margin-top:16px"><button class="primary" id="submit" type="submit">Send my quote request</button></div>
+    </section>
+  </form>
+
+  <section class="card done" id="done">
+    <div style="font-size:42px">&#9989;</div>
+    <h2>Request sent</h2>
+    <p class="sub" style="margin:0">Your reference</p>
+    <div class="ref" id="doneRef"></div>
+    <p id="doneText"></p>
+    <a class="wa" id="doneWa" target="_blank" rel="noopener">Chat with us on WhatsApp</a>
+    <p style="margin-top:18px"><a href="#" id="again">Send another request</a></p>
+  </section>
+
+  <section class="card hidden" id="setup">
+    <h2>Page not set up</h2>
+    <p class="sub">This page needs its connection code. Open it with the link from the Matrix One app (Settings &gt; Cloud sync &gt; Customer quote page).</p>
+  </section>
+</main>
+
+<footer>
+  Matrix 3D Lab UG &middot; Kampala &middot; Mon&ndash;Sat 9am&ndash;5pm<br>
+  <a href="https://wa.me/256792308649" target="_blank" rel="noopener">WhatsApp +256 792 308649</a> &middot;
+  <a href="mailto:matrixdlabs@gmail.com">matrixdlabs@gmail.com</a>
+</footer>
+
+<script src="config.js"></script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SHOP_WHATSAPP = '256792308649';
+
+// ---------- Connection (from ?c=M1:... link, config.js, or saved) ----------
+function readConfig() {
+  const params = new URLSearchParams(location.search);
+  const code = params.get('c');
+  if (code && code.startsWith('M1:')) {
+    try {
+      const b64 = code.slice(3).replace(/-/g, '+').replace(/_/g, '/');
+      const pad = b64 + '='.repeat((4 - b64.length % 4) % 4);
+      const j = JSON.parse(decodeURIComponent(escape(atob(pad))));
+      const cfg = { url: j.u, key: j.k };
+      try { localStorage.setItem('m1cfg', JSON.stringify(cfg)); } catch (_) {}
+      return cfg;
+    } catch (_) {}
+  }
+  if (window.MATRIX_ONE && window.MATRIX_ONE.url) return window.MATRIX_ONE;
+  try { const s = localStorage.getItem('m1cfg'); if (s) return JSON.parse(s); } catch (_) {}
+  return null;
+}
+const cfg = readConfig();
+const db = cfg ? createClient(cfg.url, cfg.key, { auth: { persistSession: false } }) : null;
+if (!db) {
+  document.getElementById('form').classList.add('hidden');
+  document.getElementById('setup').classList.remove('hidden');
+}
+
+// ---------- Prices (same rules as the app) ----------
+const DEFAULT_PRICES = {
+  materialRates: { 'PLA': 620, 'PETG': 620, 'PLA Blend': 620, 'ASA': 660, 'TPU': 1070, 'PA11 Nylon': 1450, 'Resin': 1200 },
+  minimumOrder: 25000, sandingPct: 20, paintingPct: 40, multiColourPct: 20, rushPct: 40,
+  studentDiscountPct: 10, designSimple: 50000, designComplex: 150000, fileRepair: 20000, deliveryKampala: 10000,
+};
+// Densities in g/cm3 (OpenPrintTag defaults where available).
+const DENSITY = { 'PLA': 1.24, 'PLA BLEND': 1.24, 'PETG': 1.27, 'ASA': 1.07, 'ABS': 1.04, 'TPU': 1.21,
+                  'PA11 NYLON': 1.03, 'PA11': 1.03, 'PC': 1.2, 'RESIN': 1.12 };
+let prices = DEFAULT_PRICES;
+
+const fmt = n => 'UGX ' + Math.round(n).toLocaleString('en-US');
+const roundUp = v => v <= 0 ? 0 : Math.ceil((v - 1e-9) / 100) * 100;
+
+function calculate(i, s) {
+  const lines = [];
+  const rate = s.materialRates[i.material] || 0;
+  const qty = Math.max(1, i.quantity | 0);
+  const print = roundUp(i.grams * qty * rate);
+  if (print > 0) lines.push([`${i.material} print, about ${Math.round(i.grams)} g x ${qty}`, print]);
+  let finishing = 0;
+  const addPct = (on, label, pct) => {
+    if (!on || !print || pct <= 0) return;
+    const a = roundUp(print * pct / 100); finishing += a; lines.push([`${label} (+${pct}%)`, a]);
+  };
+  addPct(i.sanding, 'Sanding / priming', s.sandingPct);
+  addPct(i.painting, 'Painting', s.paintingPct);
+  addPct(i.multiColour, 'Multi-colour', s.multiColourPct);
+  if (i.rush && print && s.rushPct > 0) lines.push([`Rush (+${s.rushPct}%)`, roundUp((print + finishing) * s.rushPct / 100)]);
+  const sum = () => lines.reduce((t, l) => t + l[1], 0);
+  if (i.student && s.studentDiscountPct > 0) {
+    const d = roundUp(sum() * s.studentDiscountPct / 100);
+    if (d > 0) lines.push([`Student discount (-${s.studentDiscountPct}%)`, -d]);
+  }
+  const sub = sum();
+  if (sub > 0 && sub < s.minimumOrder) lines.push(['Minimum order top-up', s.minimumOrder - sub]);
+  if (i.delivery && s.deliveryKampala > 0) lines.push(['Delivery in Kampala (from)', s.deliveryKampala]);
+  return { lines, total: lines.reduce((t, l) => t + l[1], 0) };
+}
+
+async function loadPrices() {
+  if (!db) return;
+  try {
+    const { data, error } = await db.rpc('public_price_list');
+    if (!error && data) {
+      const p = JSON.parse(data);
+      prices = { ...DEFAULT_PRICES, ...p, materialRates: { ...(p.materialRates || DEFAULT_PRICES.materialRates) } };
+    }
+  } catch (_) {}
+  const sel = document.getElementById('material');
+  sel.innerHTML = '';
+  for (const [m, r] of Object.entries(prices.materialRates)) {
+    const o = document.createElement('option');
+    o.value = m; o.textContent = `${m}  (${fmt(r)} per gram)`;
+    sel.appendChild(o);
+  }
+  update();
+}
+
+// ---------- STL reading: size, volume, surface area ----------
+function parseStl(buf) {
+  const dv = new DataView(buf);
+  const tris = [];
+  const isBinary = buf.byteLength >= 84 && 84 + dv.getUint32(80, true) * 50 === buf.byteLength;
+  if (isBinary) {
+    const n = dv.getUint32(80, true);
+    for (let t = 0; t < n; t++) {
+      const o = 84 + t * 50 + 12;
+      const v = [];
+      for (let k = 0; k < 9; k++) v.push(dv.getFloat32(o + k * 4, true));
+      tris.push(v);
+    }
+  } else {
+    const text = new TextDecoder().decode(new Uint8Array(buf));
+    const re = /vertex\s+([-+\d.eE]+)\s+([-+\d.eE]+)\s+([-+\d.eE]+)/g;
+    let m, cur = [];
+    while ((m = re.exec(text))) {
+      cur.push(+m[1], +m[2], +m[3]);
+      if (cur.length === 9) { tris.push(cur); cur = []; }
+    }
+  }
+  if (!tris.length) throw new Error('No triangles found in this file.');
+  let vol = 0, area = 0;
+  const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
+  for (const [ax, ay, az, bx, by, bz, cx, cy, cz] of tris) {
+    vol += (ax * (by * cz - bz * cy) - ay * (bx * cz - bz * cx) + az * (bx * cy - by * cx)) / 6;
+    const ux = bx - ax, uy = by - ay, uz = bz - az, wx = cx - ax, wy = cy - ay, wz = cz - az;
+    const nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
+    area += Math.sqrt(nx * nx + ny * ny + nz * nz) / 2;
+    for (const [x, y, z] of [[ax, ay, az], [bx, by, bz], [cx, cy, cz]]) {
+      if (x < min[0]) min[0] = x; if (y < min[1]) min[1] = y; if (z < min[2]) min[2] = z;
+      if (x > max[0]) max[0] = x; if (y > max[1]) max[1] = y; if (z > max[2]) max[2] = z;
+    }
+  }
+  // Units are millimetres (the STL standard in practice).
+  return {
+    volumeCm3: Math.abs(vol) / 1000,
+    areaCm2: area / 100,
+    size: [max[0] - min[0], max[1] - min[1], max[2] - min[2]],
+    triangles: tris.length,
+  };
+}
+
+// Grams of filament for one piece: walls, top and bottom (about 1.6 mm
+// thick over the surface) plus about 20% infill inside, close to a typical
+// slicer profile. A 20 mm calibration cube comes out near 6 g.
+function estimateGrams(model, material) {
+  const d = DENSITY[material.toUpperCase()] || 1.2;
+  if (material.toUpperCase() === 'RESIN') return model.volumeCm3 * d;
+  const shell = Math.min(model.volumeCm3, model.areaCm2 * 0.16);
+  return d * (shell + 0.2 * Math.max(0, model.volumeCm3 - shell));
+}
+
+// ---------- Form ----------
+const $ = id => document.getElementById(id);
+let file = null, model = null;
+
+function state() {
+  return {
+    material: $('material').value,
+    quantity: Math.max(1, parseInt($('quantity').value || '1', 10)),
+    sanding: $('sanding').checked, painting: $('painting').checked, multiColour: $('multiColour').checked,
+    rush: $('rush').checked, delivery: $('delivery').checked,
+    student: $('ctype').value === 'student',
+    needsDesign: $('needsDesign').checked,
+  };
+}
+
+function update() {
+  const s = state();
+  const linesEl = $('lines');
+  linesEl.innerHTML = '';
+  if (!model) {
+    $('priceSub').textContent = s.needsDesign
+      ? 'We price design work after we understand what you need.'
+      : (file ? 'We will price this file after checking it.' : 'Choose a model file to see the estimate.');
+    $('total').textContent = '–';
+    return null;
+  }
+  const grams = estimateGrams(model, s.material);
+  const r = calculate({ ...s, grams }, prices);
+  $('priceSub').textContent = `${Math.round(grams)} g of ${s.material} per piece (estimated)` +
+    (s.needsDesign ? '. Design is quoted separately.' : '');
+  for (const [label, amount] of r.lines) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td></td><td>${fmt(amount)}</td>`;
+    tr.firstChild.textContent = label;
+    linesEl.appendChild(tr);
+  }
+  $('total').textContent = fmt(r.total);
+  return { grams, total: r.total };
+}
+
+async function chooseFile(f) {
+  file = f; model = null;
+  const box = $('model');
+  box.style.display = 'block';
+  if (f.size > 50 * 1024 * 1024) {
+    box.innerHTML = '<span class="warn">This file is larger than 50 MB. Please send it on WhatsApp instead.</span>';
+    file = null; update(); return;
+  }
+  box.innerHTML = `<b></b><div class="facts"><span class="pill">${(f.size / 1048576).toFixed(1)} MB</span></div>`;
+  box.querySelector('b').textContent = f.name;
+  if (/\.stl$/i.test(f.name)) {
+    try {
+      model = parseStl(await f.arrayBuffer());
+      const [x, y, z] = model.size.map(v => Math.round(v));
+      box.querySelector('.facts').innerHTML +=
+        `<span class="pill">${x} x ${y} x ${z} mm</span><span class="pill">${model.volumeCm3.toFixed(1)} cm³</span>`;
+      if (Math.max(x, y, z) > 250) {
+        box.innerHTML += '<div class="warn">Bigger than 25 cm: we may print it in parts. We\'ll discuss on WhatsApp.</div>';
+      }
+      if (Math.max(x, y, z) < 2) {
+        box.innerHTML += '<div class="warn">Very small: is the file in metres or inches? We\'ll check the size with you.</div>';
+      }
+    } catch (e) {
+      box.innerHTML += `<div class="warn">Couldn't read this STL (${e.message}). Send it anyway and we'll check it.</div>`;
+    }
+  } else {
+    box.innerHTML += '<div class="warn">We price this file type after checking it.</div>';
+  }
+  update();
+}
+
+const drop = $('drop');
+drop.addEventListener('click', () => $('file').click());
+drop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') $('file').click(); });
+$('file').addEventListener('change', e => e.target.files[0] && chooseFile(e.target.files[0]));
+['dragenter', 'dragover'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => drop.addEventListener(t, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => e.dataTransfer.files[0] && chooseFile(e.dataTransfer.files[0]));
+document.querySelectorAll('#form input, #form select').forEach(el => el.addEventListener('input', update));
+
+function makeRef() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const a = new Uint8Array(6); crypto.getRandomValues(a);
+  return 'RQ-' + Array.from(a, b => chars[b % chars.length]).join('');
+}
+
+function showError(msg) { const e = $('error'); e.textContent = msg; e.style.display = msg ? 'block' : 'none'; }
+
+$('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  showError('');
+  const s = state();
+  const name = $('name').value.trim(), phone = $('phone').value.trim();
+  if (!name || phone.replace(/\D/g, '').length < 9) { showError('Please enter your name and WhatsApp number.'); return; }
+  if (!file && !s.needsDesign) { showError('Please choose your model file, or tick "I need it designed".'); return; }
+
+  const btn = $('submit'); btn.disabled = true; btn.textContent = 'Sending...';
+  const bar = $('progress'); bar.style.display = 'block'; bar.firstElementChild.style.width = '15%';
+  const ref = makeRef();
+  const est = update();
+  try {
+    let filePath = null;
+    if (file) {
+      const safe = file.name.replace(/[^A-Za-z0-9._-]+/g, '_').slice(-80);
+      filePath = `incoming/${ref}-${safe}`;
+      const { error } = await db.storage.from('quote-files').upload(filePath, file, {
+        contentType: file.type || 'application/octet-stream', upsert: false });
+      if (error) throw error;
+    }
+    bar.firstElementChild.style.width = '75%';
+    const row = {
+      ref, name, phone, email: $('email').value.trim(), customer_type: $('ctype').value,
+      material: s.material, color: $('color').value.trim(), quantity: s.quantity,
+      sanding: s.sanding, painting: s.painting, multi_colour: s.multiColour, rush: s.rush,
+      student: s.student, needs_design: s.needsDesign, delivery: s.delivery,
+      needed_by: $('neededBy').value || null, notes: $('notes').value.trim(),
+      file_path: filePath, file_name: file ? file.name.slice(0, 200) : null,
+      size_x_mm: model ? model.size[0] : null, size_y_mm: model ? model.size[1] : null,
+      size_z_mm: model ? model.size[2] : null, volume_cm3: model ? model.volumeCm3 : null,
+      est_grams: est ? est.grams : null, est_total: est ? Math.round(est.total) : null,
+    };
+    const { error } = await db.from('quote_requests').insert(row);
+    if (error) throw error;
+    bar.firstElementChild.style.width = '100%';
+
+    $('form').classList.add('hidden');
+    $('done').style.display = 'block';
+    $('doneRef').textContent = ref;
+    $('doneText').textContent = est
+      ? `Estimated ${fmt(est.total)}. We'll confirm the price and timing on WhatsApp.`
+      : `We'll look at your request and reply on WhatsApp.`;
+    $('doneWa').href = `https://wa.me/${SHOP_WHATSAPP}?text=` +
+      encodeURIComponent(`Hello Matrix 3D Lab, I sent quote request ${ref}.`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (err) {
+    showError('Sending failed: ' + (err.message || err) + '. Check your internet and try again, or send the file on WhatsApp.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Send my quote request';
+    setTimeout(() => { bar.style.display = 'none'; bar.firstElementChild.style.width = '0'; }, 600);
+  }
+});
+
+$('again').addEventListener('click', e => {
+  e.preventDefault();
+  $('form').reset(); file = null; model = null; $('model').style.display = 'none';
+  $('done').style.display = 'none'; $('form').classList.remove('hidden'); update();
+});
+
+loadPrices();
+</script>
+</body>
+</html>
