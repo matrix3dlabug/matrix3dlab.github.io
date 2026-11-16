@@ -86,7 +86,7 @@
 </header>
 
 <main>
-  <form id="form" novalidate>
+  <form id="form" novalidate class="hidden">
     <!-- 1. Model -->
     <section class="card">
       <h2><span class="step">1</span>Your model</h2>
@@ -191,7 +191,7 @@
 
   <section class="card hidden" id="setup">
     <h2>Page not set up</h2>
-    <p class="sub">This page needs its connection code. Open it with the link from the Matrix One app (Settings &gt; Cloud sync &gt; Customer quote page).</p>
+    <p class="sub"><b id="setupWhy"></b> Please message us on WhatsApp for a quote, or open the page with the link from the Matrix One app (Settings &gt; Cloud sync &gt; Customer quote page).</p>
   </section>
 </main>
 
@@ -208,10 +208,13 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SHOP_WHATSAPP = '256792308649';
 
 // ---------- Connection (from ?c=M1:... link, config.js, or saved) ----------
+let configProblem = 'This link has no connection code.';
 function readConfig() {
   const params = new URLSearchParams(location.search);
-  const code = params.get('c');
+  const code = (params.get('c') || '').trim();
+  if (code && !code.startsWith('M1:')) configProblem = 'The connection code in this link is incomplete.';
   if (code && code.startsWith('M1:')) {
+    configProblem = 'The connection code in this link is damaged (was the link cut short?).';
     try {
       const b64 = code.slice(3).replace(/-/g, '+').replace(/_/g, '/');
       const pad = b64 + '='.repeat((4 - b64.length % 4) % 4);
@@ -227,9 +230,11 @@ function readConfig() {
 }
 const cfg = readConfig();
 const db = cfg ? createClient(cfg.url, cfg.key, { auth: { persistSession: false } }) : null;
+if (db) document.getElementById('form').classList.remove('hidden');
 if (!db) {
   document.getElementById('form').classList.add('hidden');
   document.getElementById('setup').classList.remove('hidden');
+  document.getElementById('setupWhy').textContent = configProblem;
 }
 
 // ---------- Prices (same rules as the app) ----------
